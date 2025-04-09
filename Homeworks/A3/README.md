@@ -7,12 +7,10 @@ The project implements the client side of a TCP three-way handshake using raw so
 ### Implemented:
 - Client-side implementation of a modified TCP three-way handshake using raw sockets
 - SYN packet construction with correct sequence number (200)
-- Reception and parsing of SYN-ACK response from server
+- Reception and parsing of SYN-ACK response from server with correct sequence number (400)
 - Final ACK packet transmission with correct sequence number (600)
 - Complete handshake process with proper verification
 
-### Not Implemented:
-- No need for actual data transfer as the assignment focuses only on the handshake mechanism
 
 ## 2. Design Decisions
 
@@ -145,14 +143,11 @@ The project implements the client side of a TCP three-way handshake using raw so
 - Checked proper handshake completion verification
 
 ### Testing Process
-1. Start the server in one terminal
-2. Run the client in another terminal
-3. Observe log messages from both client and server
-4. Verify that all three handshake steps complete successfully
-
-### Packet Inspection
-- Used the built-in packet flag printing functionality to verify correct packet construction
-- Confirmed proper sequence and acknowledgment numbers at each step
+1. Build the project as mentioned 
+2. Start the server in one terminal
+3. Run the client in another terminal
+4. Observe log messages from both client and server
+5. Verify that all three handshake steps complete successfully
 
 ## 5. Restrictions
 
@@ -229,11 +224,13 @@ If you encounter issues:
 
 ## 12. Contribution of Each Member
 
-| Member | Contribution | Areas |
-|--------|--------------|-------|
-| Chinmay Pillai () | 40% | Design, implementation of sending functions |
-| Ashutosh Jardani () | 30% | Raw socket implementation, packet filtering, testing |
-| Shubham Kumar (200967) | 30% | Debugging, verification, documentation,, README |
+| Member | Contribution |
+|--------|--------------|
+| Chinmay Pillai (200298) | 1/3 |
+| Ashutosh Dwivedi (200214) | 1/3 |
+| Shubham Kumar (200967) | 1/3 |
+
+The team members have given equal contribution throughout the project. All the task inclusive but not limited to coding, understanding of code, creation of readme file etc. involves each team member at some point of time.
 
 ## 13. Declaration
 
