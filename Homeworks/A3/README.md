@@ -2,9 +2,8 @@
 
 The project implements the client side of a TCP three-way handshake using raw sockets.
 
-## 1. Assignment Features
+## 1. Assignment Features Implemented
 
-### Implemented:
 - Client-side implementation of a modified TCP three-way handshake using raw sockets
 - SYN packet construction with correct sequence number (200)
 - Reception and parsing of SYN-ACK response from server with correct sequence number (400)
