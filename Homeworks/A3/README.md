@@ -69,7 +69,7 @@ Note: Root privileges are required because the application uses raw sockets.
 
 ### Three-Way Handshake Diagram
 
-![Three-Way Handshake](images\threeway-handshake.png)
+![Three-Way Handshake](images/threeway-handshake.png)
 
 ## 6. Implementation
 ---
