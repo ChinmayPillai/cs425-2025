@@ -189,14 +189,14 @@ Note: Root privileges are required because the application uses raw sockets.
 4. Observe log messages from both client and server
 5. Verify that all three handshake steps complete successfully
 
-## 5. Restrictions
+## 8. Restrictions
 
 - The implementation is designed to work with the specific server provided in the assignment
 - Only works with the predefined sequence numbers (200, 400, 600)
 - Limited to localhost communication (127.0.0.1)
 - Fixed client and server ports (CLIENT_PORT=54321, SERVER_PORT=12345)
 
-## 8. Challenges
+## 9. Challenges
 
 ### Understanding Raw Sockets
 - Learning the detailed structure of IP and TCP headers
@@ -210,14 +210,14 @@ Note: Root privileges are required because the application uses raw sockets.
 - Understanding the expected sequence number flow for the modified handshake
 - Ensuring proper acknowledgment of received sequence numbers
 
-## 9. Debugging
+## 10. Debugging
 
 The application prints detailed information about each step of the handshake process, including:
 - Flags of sent and received TCP packets
 - Sequence and acknowledgment numbers
 - Success/failure status of each operation
 
-## 10. Troubleshooting
+## 11. Troubleshooting
 
 If you encounter issues:
 - Ensure you're running with root privileges (`sudo`)
@@ -225,7 +225,7 @@ If you encounter issues:
 - Verify the server is running and listening on port 12345
 - Make sure both client and server are using the same localhost address (127.0.0.1)
 
-## 11. Contribution of Each Member
+## 12. Contribution of Each Member
 
 | Member | Contribution |
 |--------|--------------|
@@ -235,18 +235,18 @@ If you encounter issues:
 
 The team members have given equal contribution throughout the project. All the task inclusive but not limited to coding, understanding of code, creation of readme file etc. involves each team member at some point of time.
 
-## 12. Declaration
+## 13. Declaration
 
 We declare that we did not indulge in plagiarism and all code has been written by our team members. Any references used have been properly cited in the Sources Referred section.
 
-## 13. Feedback
+## 14. Feedback
 
 - The assignment provided a valuable hands-on experience with low-level networking concepts
 - Examining the server code helped understand the expected client behavior
 - It would be helpful to have additional guidance on debugging raw socket implementations
 
 
-## 14. Sources Referred
+## 15. Sources Referred
 
 - Lecture notes
 - Linux raw socket programming documentation
