@@ -2,7 +2,44 @@
 
 The project implements the client side of a TCP three-way handshake using raw sockets.
 
-## 1. Assignment Features Implemented
+## 1. Requirements
+
+- Linux operating system
+- Root privileges (required for raw sockets)
+- g++ compiler with C++17 support
+
+## 2. Building the Project
+
+Use the provided Makefile to build the client:
+
+```bash
+make client
+```
+
+To build both client and server:
+
+```bash
+make all
+```
+
+## 3. Running the Implementation
+
+1. First, start the server in one terminal:
+
+```bash
+sudo ./server
+```
+
+2. Then, run the client in another terminal:
+
+```bash
+sudo ./client
+```
+
+Note: Root privileges are required because the application uses raw sockets.
+
+
+## 4. Assignment Features Implemented
 
 - Client-side implementation of a modified TCP three-way handshake using raw sockets
 - SYN packet construction with correct sequence number (200)
@@ -11,7 +48,7 @@ The project implements the client side of a TCP three-way handshake using raw so
 - Complete handshake process with proper verification
 
 
-## 2. Design Decisions
+## 5. Design Decisions
 
 ### Raw Socket Usage
 - Used raw sockets to have full control over IP and TCP headers, allowing manual construction of packets with specific sequence numbers
@@ -30,7 +67,11 @@ The project implements the client side of a TCP three-way handshake using raw so
   - Server SYN-ACK: SEQ=400, ACK=201
   - Client ACK: SEQ=600, ACK=401
 
-## 3. Implementation
+### Three-Way Handshake Diagram
+
+![Three-Way Handshake](images\threeway-handshake.png)
+
+## 6. Implementation
 ---
 
 ### **Function: `print_tcp_flags`**
@@ -133,7 +174,7 @@ The project implements the client side of a TCP three-way handshake using raw so
 6. Constructing and sending final ACK
 7. Confirming handshake completion
 
-## 4. Testing
+## 7. Testing
 
 ### Correctness Testing
 - Tested the client against the provided server implementation
@@ -155,7 +196,7 @@ The project implements the client side of a TCP three-way handshake using raw so
 - Limited to localhost communication (127.0.0.1)
 - Fixed client and server ports (CLIENT_PORT=54321, SERVER_PORT=12345)
 
-## 6. Challenges
+## 8. Challenges
 
 ### Understanding Raw Sockets
 - Learning the detailed structure of IP and TCP headers
@@ -169,51 +210,14 @@ The project implements the client side of a TCP three-way handshake using raw so
 - Understanding the expected sequence number flow for the modified handshake
 - Ensuring proper acknowledgment of received sequence numbers
 
-## 7. Requirements
-
-- Linux operating system
-- Root privileges (required for raw sockets)
-- g++ compiler with C++17 support
-
-## 8. Building the Project
-
-Use the provided Makefile to build the client:
-
-```bash
-make client
-```
-
-To build both client and server:
-
-```bash
-make all
-```
-
-## 9. Running the Implementation
-
-1. First, start the server in one terminal:
-
-```bash
-sudo ./server
-```
-
-2. Then, run the client in another terminal:
-
-```bash
-sudo ./client
-```
-
-Note: Root privileges are required because the application uses raw sockets.
-
-
-## 10. Debugging
+## 9. Debugging
 
 The application prints detailed information about each step of the handshake process, including:
 - Flags of sent and received TCP packets
 - Sequence and acknowledgment numbers
 - Success/failure status of each operation
 
-## 11. Troubleshooting
+## 10. Troubleshooting
 
 If you encounter issues:
 - Ensure you're running with root privileges (`sudo`)
@@ -221,7 +225,7 @@ If you encounter issues:
 - Verify the server is running and listening on port 12345
 - Make sure both client and server are using the same localhost address (127.0.0.1)
 
-## 12. Contribution of Each Member
+## 11. Contribution of Each Member
 
 | Member | Contribution |
 |--------|--------------|
@@ -231,18 +235,18 @@ If you encounter issues:
 
 The team members have given equal contribution throughout the project. All the task inclusive but not limited to coding, understanding of code, creation of readme file etc. involves each team member at some point of time.
 
-## 13. Declaration
+## 12. Declaration
 
 We declare that we did not indulge in plagiarism and all code has been written by our team members. Any references used have been properly cited in the Sources Referred section.
 
-## 14. Feedback
+## 13. Feedback
 
 - The assignment provided a valuable hands-on experience with low-level networking concepts
 - Examining the server code helped understand the expected client behavior
 - It would be helpful to have additional guidance on debugging raw socket implementations
 
 
-## 15. Sources Referred
+## 14. Sources Referred
 
 - Lecture notes
 - Linux raw socket programming documentation
