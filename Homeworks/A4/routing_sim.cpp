@@ -12,7 +12,7 @@ const int INF = 9999;
 
 void printDVRTable(int node, const vector<vector<int>>& table, const vector<vector<int>>& nextHop) {
     cout << "Node " << node << " Routing Table:\n";
-    cout << "Dest\tCost\tNext Hop\n";
+    cout << "Dest\tMetric\tNext Hop\n";
     for (int i = 0; i < table.size(); ++i) {
         cout << i << "\t" << table[node][i] << "\t";
         if (nextHop[node][i] == -1) cout << "-";
@@ -52,13 +52,13 @@ void simulateDVR(const vector<vector<int>>& graph) {
         }
     } while (updated);
 
-    cout << "--- DVR Final Tables ---\n";
+    // cout << "--- DVR Final Tables ---\n";
     for (int i = 0; i < n; ++i) printDVRTable(i, dist, nextHop);
 }
 
 void printLSRTable(int src, const vector<int>& dist, const vector<int>& prev) {
     cout << "Node " << src << " Routing Table:\n";
-    cout << "Dest\tCost\tNext Hop\n";
+    cout << "Dest\tMetric\tNext Hop\n";
     for (int i = 0; i < dist.size(); ++i) {
         if (i == src) continue;
         cout << i << "\t" << dist[i] << "\t";
