@@ -91,12 +91,12 @@ void simulateDVR(const vector<vector<int>>& graph) {
         }
         
         // Print DVR tables after each iteration
-        // if (updated) {
-        //     cout << "--- DVR Iteration " << iterations << " ---\n";
-        //     for (int i = 0; i < n; ++i) {
-        //         printDVRTable(i, dist, nextHop);
-        //     }
-        // }
+        if (updated) {
+            cout << "--- DVR Iteration " << iterations << " ---\n";
+            for (int i = 0; i < n; ++i) {
+                printDVRTable(i, dist, nextHop);
+            }
+        }
     } while (updated);
 
     // cout << "--- DVR Final Tables ---\n";
