@@ -30,11 +30,18 @@ void simulateDVR(const vector<vector<int>>& graph) {
     // Initialize the nextHop matrix
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
+
+            // If j is same node as i
             if (i == j) {
-                nextHop[i][j] = -1;  // No next hop for self
-            } else if (graph[i][j] != INF && graph[i][j] != 0) { 
-                nextHop[i][j] = j;   // Direct link exists
-            } else {
+                // No next hop to itself
+                nextHop[i][j] = -1;  
+            }
+            // If there is a reachable link from i to j 
+            else if (graph[i][j] != INF && graph[i][j] != 0) { 
+                nextHop[i][j] = j;   
+            } 
+            // If there is no reachable link from i to j
+            else {
                 nextHop[i][j] = -1;  // No direct link
             }
         }
@@ -48,20 +55,35 @@ void simulateDVR(const vector<vector<int>>& graph) {
         updated = false;
         iterations++;
         
-        for (int i = 0; i < n; ++i) {  // For each node i
-            for (int j = 0; j < n; ++j) {  // For each destination j
-                if (i == j) continue;  // Skip if source and destination are same
-                
-                for (int k = 0; k < n; ++k) {  // For each potential intermediate node k
-                    if (i == k || j == k) continue;  // Skip if intermediate is source or destination
-                    if (dist[i][k] == INF || dist[i][k] == 0) continue;  // Skip if no path to intermediate
-                    if (dist[k][j] == INF || dist[k][j] == 0) continue;  // Skip if no path from intermediate to destination
+        // For each node i
+        for (int i = 0; i < n; ++i) {  
+            // For each destination j
+            for (int j = 0; j < n; ++j) {  
+                // Skip if source and destination are same
+                if (i == j) 
+                    continue; 
+
+                // For each potential intermediate node k
+                for (int k = 0; k < n; ++k) { 
+
+                    // Skip if intermediate is source or destination 
+                    if (i == k || j == k) 
+                        continue;  
+                    
+                    // Skip if no path to intermediate
+                    if (dist[i][k] == INF || dist[i][k] == 0) 
+                        continue;  
+                    // Skip if no path from intermediate to destination
+                    if (dist[k][j] == INF || dist[k][j] == 0) 
+                        continue;  
                     
                     // Check if going through k is better than current route
+                    // Note: dist[i][j] == 0 means no link exists since i != j
                     int newDist = dist[i][k] + dist[k][j];
                     if (newDist < dist[i][j] || dist[i][j] == 0) {
+                        // Update distance and next hop
                         dist[i][j] = newDist;
-                        nextHop[i][j] = nextHop[i][k];  // Update next hop
+                        nextHop[i][j] = nextHop[i][k];  
                         updated = true;
                     }
                 }
@@ -69,12 +91,12 @@ void simulateDVR(const vector<vector<int>>& graph) {
         }
         
         // Print DVR tables after each iteration
-        if (updated) {
-            cout << "--- DVR Iteration " << iterations << " ---\n";
-            for (int i = 0; i < n; ++i) {
-                printDVRTable(i, dist, nextHop);
-            }
-        }
+        // if (updated) {
+        //     cout << "--- DVR Iteration " << iterations << " ---\n";
+        //     for (int i = 0; i < n; ++i) {
+        //         printDVRTable(i, dist, nextHop);
+        //     }
+        // }
     } while (updated);
 
     // cout << "--- DVR Final Tables ---\n";
@@ -103,39 +125,50 @@ void simulateLSR(const vector<vector<int>>& graph) {
         vector<bool> visited(n, false);
         dist[src] = 0;
         
-        // Dijkstra's algorithm implementation
-        for (int count = 0; count < n - 1; ++count) {
-            // Find the vertex with minimum distance value
-            int minDist = INF;
-            int u = -1;
-            
-            for (int v = 0; v < n; ++v) {
-                if (!visited[v] && dist[v] < minDist) {
-                    minDist = dist[v];
-                    u = v;
-                }
-            }
-            
-            // If no minimum was found, all remaining vertices are unreachable
-            if (u == -1) break;
-            
-            // Mark the picked vertex as visited
+        // Optimized Dijkstra's algorithm using a priority queue
+
+        // Create a min-heap via priority queue to store {distance, node}
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+        // Push the {distance = 0, source node} into the priority queue
+        pq.push({0, src});
+        // Set distance of source node to 0
+        dist[src] = 0;
+
+        // While the priority queue is not empty, i.e. processable nodes exist
+        while (!pq.empty()) {
+
+            // Get the node with the smallest distance from top of min-heap
+            int u = pq.top().second;
+            // Remove the corresponding element from the priority queue
+            pq.pop();
+
+            // If the node has already been visited, skip it
+            if (visited[u]) 
+                continue;
+            // Else mark it as visited
             visited[u] = true;
-            
-            // Update dist value of adjacent vertices
+
+            // For each neighbor of the current node
             for (int v = 0; v < n; ++v) {
-                // Update dist[v] only if:
-                // 1. There is an edge from u to v
-                // 2. The vertex v is not yet visited
-                // 3. The path through u is shorter than current value of dist[v]
-                if (!visited[v] && 
-                    graph[u][v] != 0 && 
-                    graph[u][v] != INF && 
-                    dist[u] != INF && 
-                    dist[u] + graph[u][v] < dist[v]) {
-                    
-                    dist[v] = dist[u] + graph[u][v];
-                    prev[v] = u;  // Store the previous node
+                // Skip if same node
+                if (u == v) 
+                    continue;  
+                
+                // If there is a link from u to v which is reachable(not infinite) 
+                // and v is not visited yet
+                if (graph[u][v] != 0 && graph[u][v] != INF && !visited[v]) {
+
+                    // Calculate distance to v through u
+                    int newDist = dist[u] + graph[u][v];
+                    // If the new distance is less than the current known distance to v
+                    if (newDist < dist[v]) {
+                        // Update the distance and previous node
+                        // And add the {newDistance, v} pair to the priority queue to process
+                        dist[v] = newDist;
+                        prev[v] = u;
+                        pq.push({newDist, v});
+                    }
                 }
             }
         }
