@@ -24,30 +24,55 @@ void printDVRTable(int node, const vector<vector<int>>& table, const vector<vect
 
 void simulateDVR(const vector<vector<int>>& graph) {
     int n = graph.size();
-    vector<vector<int>> dist(n, vector<int>(n));
-    vector<vector<int>> nextHop(n, vector<int>(n, -1));
-
+    vector<vector<int>> dist = graph;
+    vector<vector<int>> nextHop(n, vector<int>(n));
+    
+    // Initialize the nextHop matrix
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            dist[i][j] = graph[i][j];
-            if (i == j) nextHop[i][j] = -1;
-            else if (graph[i][j] != INF) nextHop[i][j] = j;
+            if (i == j) {
+                nextHop[i][j] = -1;  // No next hop for self
+            } else if (graph[i][j] != INF && graph[i][j] != 0) { 
+                nextHop[i][j] = j;   // Direct link exists
+            } else {
+                nextHop[i][j] = -1;  // No direct link
+            }
         }
     }
-
+    
+    // Run the DVR algorithm until no updates are made
     bool updated;
+    int iterations = 0;
+    
     do {
         updated = false;
-        for (int i = 0; i < n; ++i) {
-            for (int k = 0; k < n; ++k) {
-                if (dist[i][k] == INF) continue;
-                for (int j = 0; j < n; ++j) {
-                    if (dist[k][j] != INF && dist[i][j] > dist[i][k] + dist[k][j]) {
-                        dist[i][j] = dist[i][k] + dist[k][j];
-                        nextHop[i][j] = nextHop[i][k];
+        iterations++;
+        
+        for (int i = 0; i < n; ++i) {  // For each node i
+            for (int j = 0; j < n; ++j) {  // For each destination j
+                if (i == j) continue;  // Skip if source and destination are same
+                
+                for (int k = 0; k < n; ++k) {  // For each potential intermediate node k
+                    if (i == k || j == k) continue;  // Skip if intermediate is source or destination
+                    if (dist[i][k] == INF || dist[i][k] == 0) continue;  // Skip if no path to intermediate
+                    if (dist[k][j] == INF || dist[k][j] == 0) continue;  // Skip if no path from intermediate to destination
+                    
+                    // Check if going through k is better than current route
+                    int newDist = dist[i][k] + dist[k][j];
+                    if (newDist < dist[i][j] || dist[i][j] == 0) {
+                        dist[i][j] = newDist;
+                        nextHop[i][j] = nextHop[i][k];  // Update next hop
                         updated = true;
                     }
                 }
+            }
+        }
+        
+        // Print DVR tables after each iteration
+        if (updated) {
+            cout << "--- DVR Iteration " << iterations << " ---\n";
+            for (int i = 0; i < n; ++i) {
+                printDVRTable(i, dist, nextHop);
             }
         }
     } while (updated);
@@ -77,25 +102,44 @@ void simulateLSR(const vector<vector<int>>& graph) {
         vector<int> prev(n, -1);
         vector<bool> visited(n, false);
         dist[src] = 0;
-
-        for (int i = 0; i < n; ++i) {
+        
+        // Dijkstra's algorithm implementation
+        for (int count = 0; count < n - 1; ++count) {
+            // Find the vertex with minimum distance value
+            int minDist = INF;
             int u = -1;
-            for (int j = 0; j < n; ++j) {
-                if (!visited[j] && (u == -1 || dist[j] < dist[u])) {
-                    u = j;
+            
+            for (int v = 0; v < n; ++v) {
+                if (!visited[v] && dist[v] < minDist) {
+                    minDist = dist[v];
+                    u = v;
                 }
             }
-
-            if (u == -1 || dist[u] == INF) break;
+            
+            // If no minimum was found, all remaining vertices are unreachable
+            if (u == -1) break;
+            
+            // Mark the picked vertex as visited
             visited[u] = true;
-
+            
+            // Update dist value of adjacent vertices
             for (int v = 0; v < n; ++v) {
-                if (!visited[v] && graph[u][v] != INF && dist[v] > dist[u] + graph[u][v]) {
+                // Update dist[v] only if:
+                // 1. There is an edge from u to v
+                // 2. The vertex v is not yet visited
+                // 3. The path through u is shorter than current value of dist[v]
+                if (!visited[v] && 
+                    graph[u][v] != 0 && 
+                    graph[u][v] != INF && 
+                    dist[u] != INF && 
+                    dist[u] + graph[u][v] < dist[v]) {
+                    
                     dist[v] = dist[u] + graph[u][v];
-                    prev[v] = u;
+                    prev[v] = u;  // Store the previous node
                 }
             }
         }
+        
         printLSRTable(src, dist, prev);
     }
 }
@@ -106,7 +150,7 @@ vector<vector<int>> readGraphFromFile(const string& filename) {
         cerr << "Error: Could not open file " << filename << endl;
         exit(1);
     }
-
+    
     int n;
     file >> n;
     vector<vector<int>> graph(n, vector<int>(n));
@@ -136,3 +180,4 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
