@@ -44,12 +44,14 @@ value in the file is the number of nodes `n`, followed by `n x n` integers.
 - Bellman-Ford-inspired updates across all nodes until no change occurs
 - Each node considers all neighbors as intermediate hops
 - Tracks and updates next hop whenever cost improves
+![DVR](images/DVR.png)
 
 ### LSR Implementation
 
 - Dijkstra's algorithm implemented with a visited array (not a priority queue)
 - Computes shortest paths from each node
 - Uses predecessor tracking to determine next hop
+![LSR](images/LSR.png)
 
 ### Input Parsing
 
